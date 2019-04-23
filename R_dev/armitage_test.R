@@ -1,7 +1,7 @@
 # task: conduct an armitage test for every SNP (row) in the example dataset.
 # get example data
-readRDS("R_dev/armitage_example.RDS")
-head(readRDS)
+genos <- readRDS("R_dev/armitage_example.RDS")
+head(genos)
 
 
 # here's a function I wrote to do this for a single SNP, taking data in a 2x3 matrix:
