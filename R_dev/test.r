@@ -1,2 +1,3 @@
 cat("hello")
 
+cat("goodbye")
