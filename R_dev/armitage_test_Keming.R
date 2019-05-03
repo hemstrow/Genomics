@@ -1,6 +1,6 @@
 # task: conduct an armitage test for every SNP (row) in the example dataset.
 # get example data
-genos <- readRDS("R_dev/armitage_example.RDS")
+armitage_example <- readRDS("R_dev/armitage_example.RDS")
 head(genos)
 
 
@@ -58,6 +58,7 @@ calc_single_amitage(m, wv)
 #----------------------------------------------------
 #spliting case&control:
 case <- armitage_example[,1+2*c(0:9)]
+case <- armitage_example[,seq(from = 1, to = ncol(armitage_example), by = 2)]
 control <- armitage_example[,2*c(1:10)]
 
 # define variables
@@ -68,10 +69,39 @@ bT <- rowSums(armitage_example)
 t <- rowSums(n)
 
 # select pp,pq and qq for case
-homozygote <- case[,c(1,5,8,10)]
-pp <- rowMax(homozygote)
-qq <- rowMin(homozygote,ignore.zero = TRUE)
-pq <- rowSums(case)-pp-qq
+homozygote <- case[,c(1,5,8,10)] # adjust to pick out homozygotes by checking if the first allele matches the second allele
+# case[,which(hom.status)]
+pp <- matrixStats::rowMaxs(homozygote)
+qq <- matrixStats::rowSums2(homozygote) - matrixStats::rowMaxs(homozygote)
+pq <- t-pp-qq
+
+n <- cbind(pp, pq, qq)
+
+sum1 <- t(n)*wv # transposed because matrices will add / multiply, whatever by column rather than by row
+s1 <- colSums(sum1)
+
+# get the other sums, then b, Vb, chi
+
+# wrap in a function
+
+
+
+
+
+
+
+
+
+test <- matrix(rnorm(1000000), ncol = 5)
+test[sample(1000000, 500000, replace = F)] <- 0
+
+# option 1
+system.time(out <- qlcMatrix::rowMin(test, ignore.zero = TRUE))
+
+# option 2
+system.time(
+  out <- matrixStats::rowSums2(test) - matrixStats::rowMaxs(test)
+)
 
 
 
