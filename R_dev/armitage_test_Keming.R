@@ -87,8 +87,10 @@ s1 <- colSums(sum1)
 
 
 
-
-
+# after this is done, we'll start work on the Excoffier method of estimating haplotype frequencies. It'll be tough!
+# here a paper describing the method, I'll add an example file to work with soon.
+# Maximum-Likelihood Estimation of Molecular Haplotype Frequencies in a Diploid Population
+# Excoffier and Slatkin, 1995
 
 
 
