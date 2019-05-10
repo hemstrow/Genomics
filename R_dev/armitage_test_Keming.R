@@ -90,6 +90,22 @@ wv <- c(0,1,2)
 sum1 <- t(n)*wv # transposed because matrices will add / multiply, whatever by column rather than by row
 s1 <- colSums(sum1)
 s2 <- colSums(t(m)*wv)
+s3 <- colSums(t(m)* (wv^2))
+
+
+# equation 5
+b <- (bT*s1 - t*s2)/(bT*s3 - (s2^2))
+
+# equation 6
+Vb <- (t*(bT - t))/(bT*(bT*s3 - s2^2))
+
+# equation 7
+chi <- (b^2)/Vb
+
+out <- pchisq(chi, 1, lower.tail = F)
+
+
+
 
 
 # get the other sums, then b, Vb, chi
