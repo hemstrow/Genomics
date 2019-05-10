@@ -61,7 +61,6 @@ calc_odds_ratio <- function(x, facet){
 
 }
 
-
 do.drift <- function(as, gen, N){
 
   # a function to do random mating in one generation
@@ -89,4 +88,54 @@ do.drift <- function(as, gen, N){
   return(out.matrix)
 }
 
+calc_armitage <- function(case_control_gs){
+  # author: Keming Su
 
+  case <- case_control_gs[,seq(from = 1, to = ncol(case_control_gs), by = 2)]
+  control <- case_control_gs[,2*c(1:10)]
+
+  # define variables
+  n <- case
+  N <- case + control
+  colnames(N) <- substr(colnames(N), start=1, stop=2)
+  bT <- rowSums(case_control_gs)
+  t <- rowSums(n)
+
+  # select pp,pq and qq for case
+  homozygote <- case[, which(substr(colnames(case), start=1, stop=1) == substr(colnames(case), start=2, stop=2))]# adjust to pick out homozygotes by checking if the first allele matches the second allele
+  # case[,which(hom.status)]
+  pp.case <- matrixStats::rowMaxs(homozygote)
+  qq.case <- matrixStats::rowSums2(homozygote) - matrixStats::rowMaxs(homozygote)
+  pq.case <- t-pp.case-qq.case
+
+  n <- cbind(pp.case, pq.case, qq.case) # why use n again?
+
+  #select pp,pq and qq for all
+  homozygote <-N[, which(substr(colnames(case), start=1, stop=1) == substr(colnames(case), start=2, stop=2))]
+  pp <- matrixStats::rowMaxs(homozygote)
+  qq <- matrixStats::rowSums2(homozygote) - matrixStats::rowMaxs(homozygote)
+  pq <- rowSums(N)-pp-qq
+
+  m <- cbind(pp, pq, qq) #order of m is wrong
+
+
+  wv <- c(0,1,2)
+  sum1 <- t(n)*wv # transposed because matrices will add / multiply, whatever by column rather than by row
+  s1 <- colSums(sum1)
+  s2 <- colSums(t(m)*wv)
+  s3 <- colSums(t(m)* (wv^2))
+
+
+  # equation 5
+  b <- (bT*s1 - t*s2)/(bT*s3 - (s2^2))
+
+  # equation 6
+  Vb <- (t*(bT - t))/(bT*(bT*s3 - s2^2))
+
+  # equation 7
+  chi <- (b^2)/Vb
+
+  # return the result
+  return(pchisq(chi, 1, lower.tail = F))
+
+}
