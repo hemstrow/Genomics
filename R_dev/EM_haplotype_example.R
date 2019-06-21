@@ -16,7 +16,6 @@ names(haptable) <- haps
 
 # so here's an example funciton. Right now, it only works for the first row of ex!
 single_haplotype_estimation <- function(x, haptable, sigma = 0.0001){
-
   # find the double het. Should be able to use an approach like this when this gets extended to work with everything.
   # cj values for each possible genotype:
   s1 <- substr(names(x), 1, 1)

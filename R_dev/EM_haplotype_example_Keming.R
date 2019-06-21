@@ -4,13 +4,12 @@ ex <- readRDS("R_dev/haplotype_frequency_estimation_example.RDS")
 # this contains counts of all of the "phenotypes", or the visible genotypes of two different haplotypes
 ex <- ex[,-grep("NN", colnames(ex))]
 
-result <- data.frame(0,0,0,0) #a better way to do this?
+result <- data.frame(0,0,0,0)
 
 n <- 1
-#while(n < nrow(ex)){
 while(n <= nrow(ex)){
   x <- ex[n,]
-  phenos <- which(x != 0)
+  phenos <- which (x != 0)
   x <- x[phenos]
 
   # haptable, containing the tabulated unambigious haplotypes

@@ -108,7 +108,7 @@ calc_armitage <- function(case_control_gs){
   qq.case <- matrixStats::rowSums2(homozygote) - matrixStats::rowMaxs(homozygote)
   pq.case <- t-pp.case-qq.case
 
-  n <- cbind(pp.case, pq.case, qq.case) # why use n again?
+  n <- cbind(pp.case, pq.case, qq.case)
 
   #select pp,pq and qq for all
   homozygote <-N[, which(substr(colnames(case), start=1, stop=1) == substr(colnames(case), start=2, stop=2))]
